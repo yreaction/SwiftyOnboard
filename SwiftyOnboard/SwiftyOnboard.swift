@@ -135,6 +135,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                     self.contentMode = .scaleAspectFit
                     view.set(style: style)
                     containerView.addSubview(view)
+                    
                     var viewFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
                     viewFrame.origin.x = self.frame.width * CGFloat(index)
                     view.frame = viewFrame
@@ -155,6 +156,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                     self.bringSubview(toFront: overlay)
                 } else {
                     self.sendSubview(toBack: overlay)
+                    self.bringSubview(toFront: containerView)
                 }
                 let viewFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
                 overlay.frame = viewFrame
