@@ -83,7 +83,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
     open var style: SwiftyOnboardStyle = .dark
     open var shouldSwipe: Bool = true
     open var fadePages: Bool = true
-    
+    open var shouldOverlay: Bool = false
     
     public init(frame: CGRect, style: SwiftyOnboardStyle = .dark) {
         super.init(frame: frame)
@@ -151,7 +151,9 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                 overlay.page(count: self.pageCount)
                 overlay.set(style: style)
                 self.addSubview(overlay)
-                self.bringSubview(toFront: overlay)
+                if shouldOverlay {
+                    self.bringSubview(toFront: overlay)
+                }
                 let viewFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
                 overlay.frame = viewFrame
                 self.overlay = overlay
