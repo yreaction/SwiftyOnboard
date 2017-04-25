@@ -153,6 +153,8 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                 self.addSubview(overlay)
                 if shouldOverlay {
                     self.bringSubview(toFront: overlay)
+                } else {
+                    self.sendSubview(toBack: overlay)
                 }
                 let viewFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
                 overlay.frame = viewFrame
