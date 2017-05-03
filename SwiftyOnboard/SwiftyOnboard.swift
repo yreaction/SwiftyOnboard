@@ -41,6 +41,8 @@ public protocol SwiftyOnboardDelegate: class {
     func swiftyOnboard(_ swiftyOnboard: SwiftyOnboard, currentPage index: Int)
     func swiftyOnboard(_ swiftyOnboard: SwiftyOnboard, leftEdge position: Double)
     func swiftyOnboard(_ swiftyOnboard: SwiftyOnboard, tapped index: Int)
+    func swiftyOnboardDragged()
+
     
 }
 
@@ -83,7 +85,6 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
     open var style: SwiftyOnboardStyle = .dark
     open var shouldSwipe: Bool = true
     open var fadePages: Bool = true
-    open var shouldOverlay: Bool = false
     
     public init(frame: CGRect, style: SwiftyOnboardStyle = .dark) {
         super.init(frame: frame)
@@ -100,6 +101,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
         setUpPages()
         setOverlayView()
         containerView.isScrollEnabled = shouldSwipe
+     
     }
     
     override open func layoutSubviews() {
@@ -140,6 +142,8 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                     viewFrame.origin.x = self.frame.width * CGFloat(index)
                     view.frame = viewFrame
                     self.pages.append(view)
+                    
+                    
                 }
             }
             containerView.contentSize = CGSize(width: self.frame.width * CGFloat(pageCount), height: self.frame.height)
@@ -152,12 +156,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
                 overlay.page(count: self.pageCount)
                 overlay.set(style: style)
                 self.addSubview(overlay)
-                if shouldOverlay {
-                    self.bringSubview(toFront: overlay)
-                } else {
-                    self.sendSubview(toBack: overlay)
-                    self.bringSubview(toFront: containerView)
-                }
+                self.bringSubview(toFront: overlay)
                 let viewFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
                 overlay.frame = viewFrame
                 self.overlay = overlay
@@ -241,6 +240,9 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
         self.delegate?.swiftyOnboard(self, currentPage: currentPage)
     }
     
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.delegate?.swiftyOnboardDragged()
+    }
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentPosition = Double(getCurrentPosition())
         self.overlay?.currentPage(index: Int(round(currentPosition)))
@@ -264,6 +266,7 @@ public class SwiftyOnboard: UIView, UIScrollViewDelegate {
             containerView.setContentOffset(CGPoint(x: index * self.frame.width, y: 0), animated: animated)
         }
     }
+    
 }
 
 public enum SwiftyOnboardStyle {
